@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arun K R — Live Voice Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+/* ── EXISTING STYLES ── */
+:root {
+  --bg: #F2F2F5; --sidebar: #FFFFFF; --accent: #2F80ED;
+  --text-primary: #0D0D0D; --text-secondary: #6B6B80;
+  --border: rgba(0,0,0,0.07); --sidebar-full: 272px;
+  --radius-lg: 20px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); overflow: hidden; }
+.app { display: flex; height: 100vh; }
+
+/* ── SIDEBAR ── */
+.sidebar { width: var(--sidebar-full); background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: 0.3s; }
+.sidebar.collapsed { width: 68px; }
+.nav { flex: 1; padding: 20px 10px; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; cursor: pointer; transition: 0.2s; white-space: nowrap; overflow: hidden; }
+.nav-item:hover { background: var(--bg); }
+.nav-item.active { background: var(--accent-light); color: var(--accent); }
+.sidebar.collapsed .nav-label { opacity: 0; }
+
+/* ── MAIN & VOICE VIEW ── */
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.view { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
+.view.active { display: flex; }
+
+/* ── WAVEFORM VISUALIZER ── */
+.visualizer-container {
+    display: flex; align-items: center; gap: 8px; height: 120px; margin-bottom: 20px;
+}
+.bar {
+    width: 10px; height: 20px; background: var(--accent); border-radius: 5px;
+    transition: height 0.1s ease;
+}
+#status { font-size: 28px; font-family: 'DM Serif Display'; color: var(--accent); margin-bottom: 10px; }
+#transcript { font-size: 16px; color: var(--text-secondary); font-style: italic; max-width: 500px; text-align: center; }
+
+/* ── MIC BUTTON ── */
+.mic-btn {
+    width: 80px; height: 80px; border-radius: 50%; border: none;
+    background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    cursor: pointer; font-size: 30px; margin-top: 40px; transition: 0.3s;
+}
+.mic-btn.active { background: var(--accent); color: white; transform: scale(1.1); }
+
+/* Profile Bottom */
+.profile { padding: 15px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.avatar-sm { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+</style>
+</head>
+<body>
+
+<div class="app">
+    <aside class="sidebar" id="sidebar">
+        <div class="nav">
+            <div class="nav-item active" onclick="switchView('voice')">
+                <span>🎤</span> <span class="nav-label">Live Voice Chat</span>
+            </div>
+            <div class="nav-item" onclick="alert('Panel logic linked!')">
+                <span>📂</span> <span class="nav-label">Projects</span>
+            </div>
+        </div>
+        <div class="profile">
+            <div class="avatar-sm">AK</div>
+            <div class="nav-label"><strong>ARUN K R</strong></div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="view active" id="view-voice">
+            <div id="status">Tap to start conversation</div>
+            
+            <div class="visualizer-container" id="visualizer">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </div>
+
+            <div id="transcript">I'm ready to talk when you are...</div>
+
+            <button class="mic-btn" id="masterBtn" onclick="toggleLiveSession()">🎤</button>
+        </div>
+    </main>
+</div>
+
+<script>
+    const statusText = document.getElementById('status');
+    const transcriptText = document.getElementById('transcript');
+    const masterBtn = document.getElementById('masterBtn');
+    const bars = document.querySelectorAll('.bar');
+
+    let isLive = false;
+    let voiceInterval;
+    
+    // ── SPEECH RECOGNITION (CONTINUOUS) ──
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.continuous = true; 
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    function toggleLiveSession() {
+        if (!isLive) {
+            startSession();
+        } else {
+            stopSession();
+        }
+    }
+
+    function startSession() {
+        isLive = true;
+        masterBtn.classList.add('active');
+        masterBtn.innerText = '⏹️';
+        statusText.innerText = "I'm Listening...";
+        recognition.start();
+        animateWave(true, 'listening');
+    }
+
+    function stopSession() {
+        isLive = false;
+        masterBtn.classList.remove('active');
+        masterBtn.innerText = '🎤';
+        statusText.innerText = "Tap to start";
+        recognition.stop();
+        window.speechSynthesis.cancel();
+        animateWave(false);
+        clearInterval(voiceInterval);
+    }
+
+    recognition.onresult = (event) => {
+        let text = event.results[event.results.length - 1][0].transcript;
+        transcriptText.innerText = text;
+
+        if (event.results[event.results.length - 1].isFinal) {
+            handleAIResponse(text);
+        }
+    };
+
+    function handleAIResponse(inputText) {
+        const msg = inputText.toLowerCase();
+        let reply = "";
+
+        if (msg.includes("who are you")) reply = "I am Arun, a UX designer with 2 years of experience. I specialize in building user-centered digital products.";
+        else if (msg.includes("project")) reply = "I've worked on many projects like GolfSpinz and various fintech apps. Want to see them?";
+        else reply = "Got it! Feel free to ask about my design skills or experience.";
+
+        statusText.innerText = "Arun Speaking...";
+        speak(reply);
+    }
+
+    function speak(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.onstart = () => animateWave(true, 'speaking');
+        utterance.onend = () => {
+            statusText.innerText = "I'm Listening...";
+            animateWave(true, 'listening');
+        };
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // ── WAVE ANIMATION LOGIC ──
+    function animateWave(active, mode) {
+        if (!active) {
+            bars.forEach(b => b.style.height = '20px');
+            return;
+        }
+
+        clearInterval(voiceInterval);
+        voiceInterval = setInterval(() => {
+            bars.forEach(bar => {
+                let h = mode === 'speaking' ? Math.random() * 90 + 20 : Math.random() * 40 + 10;
+                bar.style.height = h + 'px';
+            });
+        }, 100);
+    }
+
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+</script>
+</body>
+</html>

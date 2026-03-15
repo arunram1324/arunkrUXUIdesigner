@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arun AI — Live Voice</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F2F2F5;
+            --accent: #2F80ED;
+        }
+        body, html { 
+            margin: 0; padding: 0; height: 100%; 
+            font-family: 'DM Sans', sans-serif; 
+            background: var(--bg); display: flex; 
+            align-items: center; justify-content: center; overflow: hidden;
+        }
+
+        .container { text-align: center; width: 100%; }
+
+        /* WAVEFORM ANIMATION */
+        .visualizer-gap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: 100px;
+            margin-bottom: 30px;
+        }
+        .bar {
+            width: 8px;
+            height: 20px;
+            background: var(--accent);
+            border-radius: 10px;
+            transition: height 0.1s ease;
+        }
+
+        /* STATUS TEXT */
+        #status {
+            font-size: 24px;
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 10px;
+            min-height: 35px;
+        }
+        #transcript {
+            font-size: 16px;
+            color: #6B6B80;
+            max-width: 80%;
+            margin: 0 auto;
+            font-style: italic;
+        }
+
+        /* LIVE BUTTON */
+        .mic-btn {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-size: 30px;
+            margin-top: 50px;
+            transition: 0.3s;
+        }
+        .mic-btn.active {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="status">Tap to start conversation</div>
+    
+    <div class="visualizer-gap" id="visualizer">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+    </div>
+
+    <div id="transcript">I'm listening...</div>
+
+    <button class="mic-btn" id="masterBtn" onclick="toggleLiveSession()">🎤</button>
+</div>
+
+<script>
+    const statusText = document.getElementById('status');
+    const transcriptText = document.getElementById('transcript');
+    const masterBtn = document.getElementById('masterBtn');
+    const bars = document.querySelectorAll('.bar');
+
+    let isLive = false;
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    
+    // CONTINUOUS MODE SETTINGS
+    recognition.continuous = true; 
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    function toggleLiveSession() {
+        if (!isLive) {
+            startSession();
+        } else {
+            stopSession();
+        }
+    }
+
+    function startSession() {
+        isLive = true;
+        masterBtn.classList.add('active');
+        masterBtn.innerText = '⏹️';
+        statusText.innerText = "I'm Listening...";
+        recognition.start();
+        animateWave(true);
+    }
+
+    function stopSession() {
+        isLive = false;
+        masterBtn.classList.remove('active');
+        masterBtn.innerText = '🎤';
+        statusText.innerText = "Session Ended";
+        recognition.stop();
+        window.speechSynthesis.cancel();
+        animateWave(false);
+    }
+
+    recognition.onresult = (event) => {
+        let result = event.results[event.results.length - 1];
+        let text = result[0].transcript;
+        transcriptText.innerText = text;
+
+        if (result.isFinal) {
+            handleAIResponse(text);
+        }
+    };
+
+    function handleAIResponse(inputText) {
+        const msg = inputText.toLowerCase();
+        let reply = "";
+
+        // Logic
+        if (msg.includes("who are you")) reply = "I am Arun, a UX designer with 2 years of experience. I specialize in building user-centered digital products.";
+        else if (msg.includes("project")) reply = "I have worked on several projects, including GolfSpinz and various freelance designs.";
+        else reply = "That's interesting! Tell me more about what you're looking for.";
+
+        statusText.innerText = "Arun Speaking...";
+        speak(reply);
+    }
+
+    function speak(text) {
+        // AI Pesum pothu recognition ah pause panna koodathu (Continuous)
+        // Aana AI pesuratha athuve keka koodathu, so speech volume adjust pannalam
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.onstart = () => animateWave(true, 'speaking');
+        utterance.onend = () => {
+            statusText.innerText = "I'm Listening...";
+            animateWave(true, 'listening');
+        };
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // WAVE ANIMATION LOGIC
+    function animateWave(active, mode = 'listening') {
+        bars.forEach((bar, i) => {
+            if (!active) {
+                bar.style.height = '20px';
+                return;
+            }
+            
+            // Random movement for "Live" feel
+            setInterval(() => {
+                if (!isLive) return;
+                let height = mode === 'speaking' ? Math.random() * 80 + 20 : Math.random() * 40 + 10;
+                bar.style.height = height + 'px';
+            }, 100 + (i * 20));
+        });
+    }
+</script>
+
+</body>
+</html>

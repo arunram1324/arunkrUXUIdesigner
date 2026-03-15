@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arun K R — Digital Twin AI</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F2F2F5; --sidebar: #FFFFFF; --accent: #2F80ED;
+  --text-primary: #0D0D0D; --text-secondary: #6B6B80;
+  --border: rgba(0,0,0,0.07); --sidebar-full: 272px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(--bg); overflow: hidden; }
+.app { display: flex; height: 100vh; }
+
+/* SIDEBAR */
+.sidebar { width: var(--sidebar-full); background: var(--sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; transition: 0.3s; }
+.nav { flex: 1; padding: 20px 10px; }
+.nav-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 14px; cursor: pointer; transition: 0.2s; font-weight: 500; }
+.nav-item:hover { background: #EBF3FF; color: var(--accent); }
+.nav-item.active { background: #EBF3FF; color: var(--accent); }
+
+/* MAIN AREA */
+.main { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; padding: 20px; }
+
+/* LIQUID WAVE CONTAINER */
+.wave-container {
+    position: relative; width: 100%; max-width: 400px; height: 350px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+
+.liquid-blob {
+    position: absolute; width: 220px; height: 220px;
+    background: var(--accent); border-radius: 50%;
+    filter: blur(20px); opacity: 0.5;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    animation: morph 8s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes morph {
+  0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+}
+
+#status { font-size: 32px; font-family: 'DM Serif Display'; color: var(--accent); z-index: 10; margin-bottom: 15px; text-align: center; }
+#transcript { font-size: 16px; color: var(--text-secondary); text-align: center; max-width: 80%; z-index: 10; min-height: 40px; font-style: italic; }
+
+/* MIC BUTTON */
+.mic-btn {
+    width: 85px; height: 85px; border-radius: 50%; border: none;
+    background: white; box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    cursor: pointer; font-size: 32px; margin-top: 30px; z-index: 10; transition: 0.4s;
+    display: flex; align-items: center; justify-content: center;
+}
+.mic-btn.active { background: #EB5757; color: white; transform: scale(1.15); }
+
+/* PROFILE BOTTOM */
+.profile { padding: 15px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+.avatar-sm { width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; box-shadow: 0 0 0 2px var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="app">
+    <aside class="sidebar">
+        <div class="nav">
+            <div class="nav-item active"><span>🎤</span> <span class="nav-label">Live AI Assistant</span></div>
+            <div class="nav-item" onclick="alert('Portfolio Sections linked!')"><span>📂</span> <span class="nav-label">Projects</span></div>
+        </div>
+        <div class="profile">
+            <div class="avatar-sm">AK</div>
+            <div><strong style="font-size: 14px; color: var(--accent);">ARUN K R</strong><br><small style="color:var(--text-secondary); font-size: 11px;">UX / Product Designer</small></div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div id="status">Ready to chat?</div>
+        
+        <div class="wave-container">
+            <div class="liquid-blob" id="blob"></div>
+            <div id="transcript">Click the mic and say "Who are you?"</div>
+        </div>
+
+        <button class="mic-btn" id="masterBtn" onclick="toggleLiveSession()">🎤</button>
+    </main>
+</div>
+
+<script>
+    const statusText = document.getElementById('status');
+    const transcriptText = document.getElementById('transcript');
+    const masterBtn = document.getElementById('masterBtn');
+    const blob = document.getElementById('blob');
+
+    let isLive = false;
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    
+    // CONTINUOUS CONFIG
+    recognition.continuous = true; 
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    function toggleLiveSession() {
+        if (!isLive) startSession();
+        else stopSession();
+    }
+
+    function startSession() {
+        isLive = true;
+        masterBtn.classList.add('active');
+        masterBtn.innerText = '⏹️';
+        statusText.innerText = "Listening...";
+        recognition.start();
+        updateBlob('listening');
+    }
+
+    function stopSession() {
+        isLive = false;
+        masterBtn.classList.remove('active');
+        masterBtn.innerText = '🎤';
+        statusText.innerText = "Ready to chat?";
+        transcriptText.innerText = "Click the mic to talk again";
+        recognition.stop();
+        window.speechSynthesis.cancel();
+        updateBlob('idle');
+    }
+
+    recognition.onresult = (event) => {
+        let text = "";
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+            text += event.results[i][0].transcript;
+        }
+        transcriptText.innerText = text;
+        
+        if (event.results[event.results.length - 1].isFinal) {
+            const reply = getAIReponse(text);
+            handleAIResponse(reply);
+        }
+    };
+
+    function handleAIResponse(reply) {
+        statusText.innerText = "Arun Speaking...";
+        speak(reply);
+    }
+
+function speak(text) {
+        window.speechSynthesis.cancel(); 
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        // --- PREMIUM VOICE SELECTION LOGIC ---
+        const voices = window.speechSynthesis.getVoices();
+        
+        // Namma priority list: 
+        // 1. Google US English (Natural)
+        // 2. Apple Samantha or Daniel (Premium)
+        // 3. Any English-US Male voice
+        let selectedVoice = voices.find(v => v.name.includes('Google US English')) || 
+                        voices.find(v => v.name.includes('Apple')) ||
+                        voices.find(v => v.lang === 'en-US' && v.name.includes('Male')) ||
+                        voices.find(v => v.lang.includes('en-US'));
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+
+        // --- HUMAN-LIKE PITCH & RATE ---
+        utterance.rate = 0.95;  // Konjam slow-ah pesuna thaan natural-ah irukkum
+        utterance.pitch = 1.0;  // Normal pitch
+        
+        utterance.onstart = () => updateBlob('speaking');
+        utterance.onend = () => {
+            if (isLive) {
+                statusText.innerText = "Listening...";
+                updateBlob('listening');
+            }
+        };
+        window.speechSynthesis.speak(utterance);
+    }
+    // ── KNOWLEDGE BASE LOGIC ──
+    function getAIReponse(input) {
+        const m = input.toLowerCase();
+        if (m.includes("who") || m.includes("intro") || m.includes("about")) {
+            return "I am Arun K R, a UX and Product Designer with over 2 years of experience in Chennai. I specialize in building user-centered products.";
+        }
+        if (m.includes("project") || m.includes("work") || m.includes("golf")) {
+            return "I've worked on some great projects like GolfSpinz, which is a golf-themed game, and several FinTech apps.";
+        }
+        if (m.includes("freelance")) {
+            return "Yes! I recently started my freelance design business in March 2026. I am now open to local and international clients.";
+        }
+        if (m.includes("skill") || m.includes("tool")) {
+            return "My core skills are UX Research and Design Systems. I use tools like Figma, Framer, and Spline 3D every day.";
+        }
+        if (m.includes("monitor") || m.includes("setup")) {
+            return "I use a 32-inch Zebronics monitor with a MacBook Air M4 to keep my designs pixel-perfect.";
+        }
+        return "That sounds interesting! Want to know more about my design process or freelance business?";
+    }
+
+    function updateBlob(mode) {
+        if (mode === 'listening') {
+            blob.style.transform = 'scale(1.3)';
+            blob.style.background = '#2F80ED';
+            blob.style.filter = 'blur(25px)';
+        } else if (mode === 'speaking') {
+            blob.style.transform = 'scale(2.2)';
+            blob.style.background = '#9B51E0'; 
+            blob.style.filter = 'blur(35px)';
+        } else {
+            blob.style.transform = 'scale(1)';
+            blob.style.background = '#2F80ED';
+            blob.style.filter = 'blur(20px)';
+        }
+    }
+
+    // Pre-load voices
+    window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+</script>
+</body>
+</html>
