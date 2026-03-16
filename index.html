@@ -1,93 +1,1078 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]>      <html class="no-js"> <![endif]-->
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
-    <body class="p-6 md:p-10 bg-blue-500 bg-opacity-20">
-        <section >
-            <div class="container  mx-auto ">
-                <div class="flex items-center">
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Arun K R — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --bg:#F2F2F5; --sb:#FFFFFF; --card:#FFFFFF;
+  --blue:#2B5CE6; --bluedark:#1E4BC8; --bluepill:rgba(43,92,230,.10);
+  --tx:#0F0F0F; --body:#6B6B80; --nav:#1A1A1A; --muted:#B0B0C0;
+  --border:rgba(0,0,0,.08); --shadow:rgba(0,0,0,.06);
+  --fd:'Big Shoulders Display',sans-serif; --fb:'DM Sans',sans-serif;
+  --sbw:296px; --icw:64px; --toph:58px; --both:68px;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+[data-theme="dark"] {
+  --bg:#0F0F0F; --sb:#161616; --card:#1C1C1C;
+  --blue:#D9F21A; --bluedark:#b8cc10; --bluepill:rgba(217,242,26,.10);
+  --tx:#F0F0F0; --body:#8A8A9F; --nav:#DEDEDE; --muted:#484860;
+  --border:rgba(255,255,255,.08); --shadow:rgba(0,0,0,.4);
+}
+/* ─── RESET ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--fb);background:var(--bg);color:var(--tx);overflow:hidden;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s}
+/* ─── SHELL ─── */
+.app{display:flex;height:100dvh;background:var(--bg);transition:background .25s}
+/* ─── SIDEBAR ─── */
+.sb{width:var(--sbw);min-width:var(--sbw);background:var(--sb);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;z-index:40;overflow:hidden;transition:width .28s var(--ease),min-width .28s var(--ease),transform .3s var(--ease),background .25s,border-color .25s}
+.sb.icon{width:var(--icw);min-width:var(--icw)}
+@media(max-width:1023px) and (min-width:768px){.sb{position:fixed;left:0;top:0;bottom:0;width:var(--sbw)!important;min-width:var(--sbw)!important;transform:translateX(-100%);box-shadow:4px 0 28px rgba(0,0,0,.14)}.sb.open{transform:translateX(0)}}
+@media(max-width:767px){.sb{display:none!important}}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:35;opacity:0;transition:opacity .25s;pointer-events:none}
+.overlay.show{opacity:1;pointer-events:all}
+@media(max-width:1023px) and (min-width:768px){.overlay{display:block}}
+/* hamburger */
+.sb-top{padding:20px 16px 10px;display:flex;align-items:center;flex-shrink:0}
+.hbg{width:38px;height:38px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;border-radius:8px;flex-shrink:0;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.hbg:hover{background:var(--bluepill)}
+.hbg span{display:block;width:18px;height:1.5px;background:var(--tx);border-radius:2px;transition:background .25s}
+/* nav */
+.nav{flex:1;padding:4px 8px;overflow:hidden}
+.ni-row{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;cursor:pointer;white-space:nowrap;position:relative;transition:background .15s;user-select:none;min-height:44px;margin-bottom:2px;-webkit-tap-highlight-color:transparent}
+.ni-row:hover{background:var(--bluepill)}
+.ni-row.on{background:var(--blue)}
+.ni-row.on .ico,.ni-row.on .lbl{color:#fff!important}
+.ni-row.on .chev{color:rgba(255,255,255,.6)!important}
+[data-theme="dark"] .ni-row.on .ico,[data-theme="dark"] .ni-row.on .lbl{color:#0F0F0F!important}
+[data-theme="dark"] .ni-row.on .chev{color:rgba(15,15,15,.55)!important}
+.ico{width:18px;height:18px;min-width:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--nav);transition:color .15s}
+.lbl{flex:1;font-family:var(--fb);font-size:13.5px;font-weight:500;color:var(--nav);overflow:hidden;white-space:nowrap;opacity:1;max-width:200px;transition:opacity .24s var(--ease),max-width .28s var(--ease)}
+.chev{font-size:16px;color:var(--muted);flex-shrink:0;line-height:1;opacity:1;max-width:20px;overflow:hidden;transition:opacity .24s var(--ease),max-width .28s var(--ease)}
+.sb.icon .lbl,.sb.icon .chev{opacity:0;pointer-events:none;max-width:0;padding:0;margin:0;flex:0}
+.sb.icon .ni-row{justify-content:center!important;padding:11px 0!important;gap:0!important}
+@media(min-width:1024px){.sb.icon .ni-row::after{content:attr(data-tip);position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%);background:#1a1a2e;color:#fff;font-family:var(--fb);font-size:12px;font-weight:500;padding:5px 12px;border-radius:8px;white-space:nowrap;z-index:200;pointer-events:none;opacity:0;transition:opacity .15s}.sb.icon .ni-row:hover::after{opacity:1}}
+/* profile */
+.sb-prof{padding:14px 10px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;overflow:hidden;transition:border-color .25s}
+.av{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#2B5CE6,#1a40b8);border:2.5px solid #2B5CE6;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:14px;font-weight:700;color:#fff;position:relative;overflow:hidden;transition:border-color .25s}
+.av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.av-dot{position:absolute;bottom:0;right:0;width:10px;height:10px;border-radius:50%;background:#22C55E;border:2px solid var(--sb);transition:border-color .25s}
+.sb-info{overflow:hidden;opacity:1;transition:opacity .24s var(--ease)}
+.sb.icon .sb-info{opacity:0;pointer-events:none}
+.sb-name{font-family:var(--fd);font-size:15px;font-weight:700;color:#2B5CE6;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;transition:color .25s}
+[data-theme="dark"] .sb-name{color:var(--blue)}
+.sb-role{font-family:var(--fb);font-size:11px;color:var(--body);white-space:nowrap;margin-top:2px;transition:color .25s}
+/* ─── MAIN ─── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:var(--toph);padding:0 24px;display:flex;align-items:center;justify-content:space-between;background:rgba(242,242,245,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);flex-shrink:0;z-index:10;transition:background .25s,border-color .25s}
+[data-theme="dark"] .topbar{background:rgba(15,15,15,.92)}
+.tb-left{display:flex;align-items:center;gap:12px}
+.tb-ham{display:none;width:36px;height:36px;border:none;background:none;cursor:pointer;flex-direction:column;justify-content:center;align-items:center;gap:5px;border-radius:8px;flex-shrink:0;transition:background .15s;-webkit-tap-highlight-color:transparent}
+.tb-ham span{display:block;width:18px;height:1.5px;background:var(--tx);border-radius:2px}
+@media(max-width:1023px) and (min-width:768px){.tb-ham{display:flex}}
+.tb-title{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--tx);text-transform:uppercase;letter-spacing:.04em;transition:color .25s}
+@media(max-width:767px){.topbar{padding:0 14px}.tb-title{font-size:16px}}
+.tb-right{display:flex;align-items:center;gap:10px}
+/* theme btn */
+.thm{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,border-color .2s,transform .15s;color:var(--body);-webkit-tap-highlight-color:transparent}
+.thm:hover{transform:scale(1.08);border-color:var(--blue)}
+.thm:active{transform:scale(.92)}
+[data-theme="dark"] .thm{background:#252525;border-color:rgba(255,255,255,.1);color:var(--blue)}
+[data-theme="dark"] .thm:hover{border-color:var(--blue);background:var(--bluepill)}
+.i-moon{display:flex}.i-sun{display:none}
+[data-theme="dark"] .i-moon{display:none}[data-theme="dark"] .i-sun{display:flex}
+.tb-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#2B5CE6,#1a40b8);border:2px solid #2B5CE6;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:13px;font-weight:700;color:#fff;cursor:pointer;flex-shrink:0;overflow:hidden;transition:border-color .25s}
+.tb-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+[data-theme="dark"] .tb-av{background:#252525;border-color:var(--blue)}
+/* ─── VIEWS ─── */
+.view{flex:1;overflow:hidden;display:none;flex-direction:column}
+.view.on{display:flex}
+.ps{flex:1;overflow-y:auto;background:var(--bg);transition:background .25s}
+.ps::-webkit-scrollbar{width:4px}.ps::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+@media(max-width:767px){.ps{padding-bottom:calc(var(--both) + env(safe-area-inset-bottom))}}
 
-                    <!-- Header Menus -->
+/* ════════════════════════════════════
+   SELF INTRO
+════════════════════════════════════ */
+#v-intro .ps{padding:28px}
+@media(max-width:767px){#v-intro .ps{padding:16px 14px calc(var(--both) + 20px + env(safe-area-inset-bottom))}}
+.intro-card{background:var(--card);border-radius:28px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 24px var(--shadow);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr auto;animation:fu .38s ease both;transition:background .25s,border-color .25s}
+.intro-ttl{grid-column:1;grid-row:1;padding:36px 40px 0;font-family:var(--fd);font-size:34px;font-weight:700;color:var(--tx);letter-spacing:-.01em;align-self:start;transition:color .25s}
+.intro-gap{grid-column:1;grid-row:2;background:var(--card);transition:background .25s}
+.intro-photo{grid-column:2;grid-row:1/3;background:#2B5CE6;display:flex;align-items:flex-end;justify-content:center;min-height:460px;position:relative;overflow:hidden}
+.intro-photo::before{content:'';position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);width:400px;height:400px;background:#FFF;border-radius:50%}
+.intro-fig{position:relative;z-index:2;width:250px;height:350px;display:flex;align-items:flex-end;justify-content:center}
+.intro-fig img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:125px 125px 0 0}
+.intro-ph{width:100%;height:100%;border-radius:125px 125px 0 0;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.04));border:2px solid rgba(255,255,255,.22);border-bottom:none;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:72px;font-weight:900;color:rgba(255,255,255,.22);letter-spacing:-3px}
+.intro-body{grid-column:1/3;grid-row:3;padding:44px 8%;text-align:center;display:flex;flex-direction:column;align-items:center;background:var(--card);transition:background .25s}
+.intro-hl{font-family:var(--fd);font-size:clamp(20px,2.8vw,36px);font-weight:800;color:#2B5CE6;letter-spacing:-.01em;line-height:1.1;margin-bottom:16px;transition:color .25s}
+[data-theme="dark"] .intro-hl{color:var(--blue)}
+.intro-desc{font-family:var(--fb);font-size:15px;color:var(--body);line-height:1.75;max-width:560px;transition:color .25s}
+.intro-tags{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:28px}
+.i-tag{font-family:var(--fb);font-size:13px;font-weight:500;padding:7px 20px;border-radius:24px;border:1.5px solid #2B5CE6;color:#2B5CE6;background:transparent;transition:background .2s,color .2s;cursor:default}
+[data-theme="dark"] .i-tag{border-color:var(--blue);color:var(--blue)}
+@media(max-width:1023px) and (min-width:768px){.intro-photo{min-height:360px}.intro-photo::before{width:300px;height:300px;bottom:-48px}.intro-fig{width:190px;height:260px}.intro-ttl{font-size:26px;padding:26px 26px 0}.intro-body{padding:32px 7%}}
+@media(max-width:767px){.intro-card{grid-template-columns:1fr;grid-template-rows:auto auto auto;border-radius:20px}.intro-ttl{grid-column:1;grid-row:1;font-size:24px;padding:22px 20px 0}.intro-gap{display:none}.intro-photo{grid-column:1;grid-row:2;min-height:260px}.intro-photo::before{width:240px;height:240px;bottom:-32px}.intro-fig{width:160px;height:210px}.intro-ph{font-size:52px}.intro-body{grid-column:1;grid-row:3;padding:28px 5%}.intro-hl{font-size:clamp(17px,5.5vw,24px)}.intro-desc{font-size:14px}}
 
-    <a class="text-xl font-bold pr-5 mr-5 border-red-100" href="index.html">2KD2 Solution</a>
-    <div class="my-auto ">
-        <button class="lg:hidden"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12H12m-8.25 5.25h16.5" />
-          </svg>
-          
-           
-          </button>
-       
-        <ul class=" hidden lg:flex text-md">
-            <li class="p-2"><a class="px-2 py-2 rounded  hover:bg-orange-500 hover:text-white" href=""> Home</a></li>
-            <li class="p-2"><a class="px-2 py-2 rounded hover:bg-orange-500 hover:text-white" href=""> About Us</a></li>
-            <li class="p-2"><a class="px-2 py-2 rounded hover:bg-orange-500 hover:text-white" href=""> Services</a></li>
-            <li class="p-2"><a class="px-2 py-2 rounded hover:bg-orange-500 hover:text-white" href=""> Contact Us</a></li>
-           
-        </ul>
-    </div>
-<a href="" class="  flex ml-auto text-md font-medium bg-orange-500 text-white px-3 py-3 rounded-md"> 
-    <span class="pr-2 hidden lg:block">Get a Quote</span>
-     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
-   </a>
-                </div>
+/* ════════════════════════════════════
+   UNIVERSAL PANEL CARD
+   Same layout as Self Intro:
+   Left = white content | Right = blue accent col
+════════════════════════════════════ */
+.pnl-card{
+  background:var(--card);
+  border-radius:28px;overflow:hidden;
+  border:1px solid var(--border);
+  box-shadow:0 2px 24px var(--shadow);
+  display:grid;
+  grid-template-columns:1fr minmax(220px,30%);
+  grid-template-rows:1fr;
+  min-height:calc(100vh - var(--toph) - 56px);
+  animation:fu .38s ease both;
+  transition:background .25s,border-color .25s;
+}
+/* Left: scrollable content */
+.pnl-left{
+  grid-column:1;grid-row:1;
+  padding:36px 40px 40px;
+  overflow-y:auto;
+  background:var(--card);
+  transition:background .25s;
+}
+.pnl-left::-webkit-scrollbar{width:4px}
+.pnl-left::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+/* Right: blue accent column */
+.pnl-right{
+  grid-column:2;grid-row:1;
+  background:#2B5CE6;
+  overflow:hidden;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.pnl-right-img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center;
+}
+/* Decorative overlay pattern on right col */
+.pnl-right-deco{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--fd);font-size:120px;font-weight:900;
+  color:rgba(255,255,255,.07);letter-spacing:-6px;
+  user-select:none;pointer-events:none;
+}
+/* Panel section title */
+.pnl-ttl{
+  font-family:var(--fd);font-size:34px;font-weight:700;
+  color:var(--tx);letter-spacing:-.01em;
+  margin-bottom:32px;animation:fu .35s ease both;
+  transition:color .25s;
+}
+/* Responsive */
+@media(max-width:1023px) and (min-width:768px){
+  .pnl-card{grid-template-columns:1fr minmax(180px,25%)}
+  .pnl-left{padding:28px 28px 32px}
+  .pnl-ttl{font-size:26px;margin-bottom:24px}
+}
+@media(max-width:767px){
+  .pnl-card{
+    grid-template-columns:1fr;
+    grid-template-rows:auto auto;
+    min-height:unset;border-radius:20px;
+  }
+  .pnl-right{grid-column:1;grid-row:1;min-height:140px}
+  .pnl-left{grid-column:1;grid-row:2;padding:20px 18px 24px;overflow-y:visible}
+  .pnl-ttl{font-size:22px;margin-bottom:20px}
+}
 
-                <!-- Mobile Responsive Menus -->
+/* ════════════════════════════════════
+   WORK EXPERIENCE
+════════════════════════════════════ */
+/* #v-exp .ps handled by inline style on ps element */
+.wk-left{flex:1;min-width:0;background:var(--card);padding:36px 40px 40px;overflow-y:auto;transition:background .25s}
+.wk-left::-webkit-scrollbar{width:4px}.wk-left::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.wk-ttl{font-family:var(--fd);font-size:36px;font-weight:700;color:var(--tx);letter-spacing:-.01em;margin-bottom:40px;animation:fu .35s ease both;transition:color .25s}
+.timeline{display:flex;flex-direction:column}
+.tl{display:flex;gap:20px;position:relative;padding-bottom:40px;animation:fu .35s ease both}
+.tl:last-child{padding-bottom:0}
+.tl-l{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:24px}
+.tl-ic{width:24px;height:24px;flex-shrink:0;color:#2B5CE6;display:flex;align-items:center;justify-content:center}
+[data-theme="dark"] .tl-ic{color:var(--blue)}
+.tl-ln{flex:1;width:2px;background:var(--border);margin-top:4px;transition:background .25s}
+.tl-r{flex:1;min-width:0;padding-top:2px}
+.tl-badge{display:inline-flex;align-items:center;font-family:var(--fb);font-size:12px;font-weight:500;color:var(--body);background:var(--bg);border:1px solid var(--border);padding:4px 14px;border-radius:20px;margin-bottom:14px;transition:background .25s,border-color .25s,color .25s}
+.tl-co{font-family:var(--fd);font-size:22px;font-weight:700;color:#2B5CE6;letter-spacing:-.01em;margin-bottom:10px;transition:color .25s}
+[data-theme="dark"] .tl-co{color:var(--blue)}
+.tl-tx{font-family:var(--fb);font-size:14px;color:var(--body);line-height:1.7;max-width:460px;transition:color .25s}
+.wk-right{width:320px;min-width:320px;flex-shrink:0;background:#2B5CE6;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.wk-right img{width:100%;height:100%;object-fit:cover}
+.wk-ph{width:100%;height:100%;min-height:500px;background:linear-gradient(160deg,#2B5CE6 0%,#1a40b8 100%);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:90px;font-weight:900;color:rgba(255,255,255,.1);letter-spacing:-4px}
+@media(max-width:1023px) and (min-width:768px){.wk-right{width:240px;min-width:240px}.wk-left{padding:28px 28px 32px}.wk-ttl{font-size:28px;margin-bottom:28px}}
+@media(max-width:767px){#v-exp .ps{display:block}.wk-right{width:100%;min-width:0;height:220px}.wk-ph{min-height:220px;font-size:60px}.wk-left{padding:20px 18px 24px;overflow-y:visible}}
 
-                <div>
-                    <ul class="lg:hidden text-md">
-                        <li class="p-2"><a class="px-2 py-2 rounded  hover:bg-orange-500 hover:text-white" href=""> Home</a></li>
-                        <li class="p-2"><a class="px-2 py-2 rounded hover:bg-orange-500 hover:text-white" href=""> About Us</a></li>
-                        <li class="p-2"><a class="px-2 py-2 rounded hover:bg-orange-500 hover:text-white" href=""> Services</a></li>
-                        <li class="p-2"><a class="px-2 py-2 rounded hover:bg-orange-500 hover:text-white" href=""> Contact Us</a></li>
-                       
-                    </ul>
-                </div>
+/* ════════════════════════════════════
+   PROJECTS
+════════════════════════════════════ */
+/* #v-proj .ps handled by inline style */
+.proj-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:32px;gap:16px;animation:fu .35s ease both}
+.proj-ttl{font-family:var(--fd);font-size:36px;font-weight:700;color:var(--tx);letter-spacing:-.01em;transition:color .25s}
+@media(max-width:767px){.proj-ttl{font-size:24px}}
+.proj-nav{display:flex;align-items:center;gap:10px;flex-shrink:0;padding-top:4px}
+.pnav{width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s;-webkit-tap-highlight-color:transparent}
+.pnav:hover{transform:scale(1.07)}.pnav:active{transform:scale(.93)}
+.pnav-p{background:var(--card);border:1.5px solid var(--border);color:var(--body)}
+.pnav-n{background:#2B5CE6;color:#fff;border:none}
+[data-theme="dark"] .pnav-n{background:var(--blue);color:#0F0F0F}
+.pgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:1400px){.pgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:767px){.pgrid{grid-template-columns:1fr;gap:12px}}
+.pcard{border-radius:20px;overflow:hidden;background:linear-gradient(160deg,#0d0d1a 0%,#12132a 50%,#1a1030 100%);position:relative;cursor:pointer;aspect-ratio:3/2;display:flex;flex-direction:column;justify-content:flex-end;transition:transform .2s,box-shadow .2s;animation:fu .35s ease both}
+.pcard:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,.3)}
+.pcard-mock{position:absolute;top:0;left:50%;transform:translateX(-50%);width:52%;height:95%;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.08);border-radius:28px;margin-top:10px}
+.pcard-badge{position:absolute;top:14px;right:14px;font-family:var(--fb);font-size:11px;font-weight:500;color:#fff;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);padding:4px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.15)}
+.pcard-info{position:relative;z-index:2;padding:16px 18px 18px;background:linear-gradient(0deg,rgba(0,0,0,.75),transparent)}
+.pcard-name{font-family:var(--fd);font-size:20px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.02em;margin-bottom:4px}
+.pcard-desc{font-family:var(--fb);font-size:12px;color:rgba(255,255,255,.7);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
-<!-- Hero Font Section -->
+/* ════════════════════════════════════
+   GENERIC PANELS (tools / skills / contact)
+════════════════════════════════════ */
+.gps{padding:28px 28px 40px}
+@media(max-width:767px){.gps{padding:18px 14px calc(var(--both) + 20px + env(safe-area-inset-bottom))}}
+.gttl{font-family:var(--fd);font-size:28px;font-weight:700;color:var(--tx);text-transform:uppercase;margin-bottom:24px;animation:fu .35s ease both;transition:color .25s}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.gchip{background:var(--card);border-radius:14px;padding:13px 16px;display:flex;align-items:center;gap:10px;font-family:var(--fb);font-size:13.5px;font-weight:500;color:var(--tx);border:1px solid var(--border);animation:fu .35s ease both;transition:background .25s,border-color .25s,color .25s}
+.gchip span{font-size:18px;flex-shrink:0}
+.gcard{background:var(--card);border-radius:20px;padding:24px 28px;border:1px solid var(--border);box-shadow:0 1px 6px var(--shadow);animation:fu .35s ease both;transition:background .25s,border-color .25s}
+.gcard-ico{font-size:24px;margin-bottom:12px;display:block}
+.gcard-h{font-family:var(--fd);font-size:20px;font-weight:700;color:var(--tx);text-transform:uppercase;margin-bottom:10px;transition:color .25s}
+.gcard-p{font-family:var(--fb);font-size:14px;color:var(--body);line-height:1.7;margin-bottom:16px;transition:color .25s}
+.clinks{display:flex;flex-direction:column;gap:10px}
+.clink{display:flex;align-items:center;gap:13px;padding:13px 16px;border-radius:12px;background:var(--bg);border:1px solid var(--border);text-decoration:none;color:var(--tx);font-family:var(--fb);font-size:14px;font-weight:500;min-height:50px;transition:background .15s,color .15s,border-color .15s}
+.clink:hover{background:var(--bluepill);color:#2B5CE6;border-color:#2B5CE6}
+[data-theme="dark"] .clink:hover{color:var(--blue);border-color:var(--blue)}
+.clink span{font-size:17px;width:22px;text-align:center;flex-shrink:0}
 
-                <div class="flex py-32 ">
-                   <div class="w-1/2 ">
-<h1 class="text-6xl font-bold leading-snug">
-    Let's Create Success Together..!
-</h1>
-<p class="mt-6 text-md font-medium text-gray-600 leading-normal">
-    Elevate your business to the next level with our customized Mobile app <br>
-    development services in Tamilnadu, Trichy.
-</p>
-<div class="mt-12">
-    <a class="mr-6 bg-[#00BFA6] text-white font-medium px-12 py-3 rounded-md hover:hover:bg-orange-500 hover:text-white" href=""> Services</a>
-   
+/* ════════════════════════════════════
+   VIRTUAL TWIN
+════════════════════════════════════ */
+#v-vt{flex-direction:column}
+/* VT tabs */
+.vt-tabs{display:flex;gap:4px;padding:16px 16px 0;flex-shrink:0;background:var(--bg);transition:background .25s}
+.vt-tab{display:flex;align-items:center;gap:7px;padding:8px 18px;border-radius:24px;border:none;cursor:pointer;font-family:var(--fb);font-size:13px;font-weight:600;background:transparent;color:var(--muted);transition:background .18s,color .18s;-webkit-tap-highlight-color:transparent}
+.vt-tab:hover{background:var(--bluepill);color:var(--blue)}
+.vt-tab.on{background:var(--blue);color:#fff}
+[data-theme="dark"] .vt-tab.on{color:#0F0F0F}
+/* Voice panel */
+.vt-voice-panel{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;gap:0;transition:background .25s}
+.vt-chat-panel{flex:1;display:flex;flex-direction:column;overflow:hidden}
+/* Ambient glow */
+.vt-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(43,92,230,.06),transparent 70%);transition:background .8s}
+.vt-glow.listening{background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(43,92,230,.10),transparent 70%)}
+.vt-glow.speaking{background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(155,81,224,.12),transparent 70%)}
+[data-theme="dark"] .vt-glow{background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(217,242,26,.05),transparent 70%)}
+[data-theme="dark"] .vt-glow.listening{background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(217,242,26,.10),transparent 70%)}
+/* Blob stage */
+.vt-blob-stage{position:relative;width:220px;height:220px;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+@media(max-width:767px){.vt-blob-stage{width:180px;height:180px}}
+#voiceBlob{position:absolute;width:100px;height:100px;border-radius:60% 40% 30% 70%/60% 30% 70% 40%;background:var(--blue);filter:blur(18px);transform:scale(1);animation:morph 8s ease-in-out infinite;transition:background .6s,filter .5s,transform .5s;z-index:1;cursor:pointer}
+@media(max-width:767px){#voiceBlob{width:80px;height:80px}}
+#masterBtn{position:absolute;width:62px;height:62px;border-radius:50%;border:none;background:rgba(255,255,255,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);cursor:pointer;z-index:10;font-size:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 22px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .15s,background .2s;-webkit-tap-highlight-color:transparent}
+#masterBtn:hover{transform:scale(1.07)}
+#masterBtn:active{transform:scale(.92)}
+#masterBtn.live{background:rgba(255,255,255,.3)}
+/* Status area */
+.vt-status-area{display:flex;flex-direction:column;align-items:center;gap:12px;max-width:380px;padding:0 20px;width:100%;margin-top:32px;z-index:1}
+@media(max-width:767px){.vt-status-area{margin-top:22px;gap:10px}}
+/* Badge */
+.vt-badge{display:flex;align-items:center;gap:6px;font-family:var(--fd);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:20px;background:var(--bluepill);color:var(--blue);opacity:0;transform:translateY(4px);transition:all .3s}
+.vt-badge.show{opacity:1;transform:translateY(0)}
+.vt-badge.speaking{background:rgba(155,81,224,.1);color:#9B51E0}
+.vt-bdot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:badge-pulse 1.4s ease-in-out infinite;flex-shrink:0}
+.vt-badge.speaking .vt-bdot{background:#9B51E0}
+#voiceStatus{font-family:var(--fd);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .4s}
+.vt-transcript-card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:13px 20px;min-height:52px;width:100%;box-shadow:0 2px 10px var(--shadow);display:flex;align-items:center;justify-content:center;transition:background .25s,border-color .25s}
+#voiceTranscript{font-family:var(--fb);font-size:14px;color:var(--body);line-height:1.6;text-align:center;font-style:italic;transition:color .3s}
+.vt-hints{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+.vt-hint{font-family:var(--fb);font-size:11px;font-weight:500;padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--card);color:var(--body);cursor:pointer;user-select:none;transition:background .18s,border-color .18s,color .18s,transform .12s;-webkit-tap-highlight-color:transparent}
+.vt-hint:hover{background:var(--bluepill);border-color:var(--blue);color:var(--blue);transform:translateY(-1px)}
+.vt-hint:active{transform:scale(.96)}
+@media(max-width:400px){.vt-hints{display:none}}
+@keyframes badge-pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.75)}}
+.vt-wrap{flex:1;display:flex;flex-direction:column;background:var(--bg);transition:background .25s;overflow:hidden}
+/* initial state */
+.vt-init{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 20px 0}
+.vt-hidden{display:none!important}
+.vt-sub{font-family:var(--fb);font-size:15px;color:var(--body);line-height:1.7;max-width:460px;text-align:center;margin-bottom:20px;transition:color .25s}
+.vt-hl{font-family:var(--fd);font-size:clamp(26px,3vw,42px);font-weight:800;color:#2B5CE6;text-align:center;line-height:1.15;letter-spacing:-.01em;animation:fu .5s ease both}
+[data-theme="dark"] .vt-hl{color:var(--blue)}
+/* messages */
+.vt-msgs{flex:1;overflow-y:auto;padding:24px 8% 16px;display:flex;flex-direction:column;gap:18px}
+.vt-msgs::-webkit-scrollbar{width:4px}.vt-msgs::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+@media(max-width:767px){.vt-msgs{padding:16px 14px 12px}}
+/* bubbles */
+.msg{display:flex;gap:10px;animation:fu .28s ease both}
+.msg.u{flex-direction:row-reverse}
+.m-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:11px;font-weight:700}
+.msg.ai .m-av{background:linear-gradient(135deg,#2B5CE6,#1a40b8);color:#fff}
+.msg.u .m-av{background:#1a1a2e;color:#fff}
+.m-body{display:flex;flex-direction:column;gap:3px;max-width:68%}
+.msg.u .m-body{align-items:flex-end}
+.bub{padding:11px 16px;border-radius:18px;font-family:var(--fb);font-size:14px;line-height:1.65}
+.msg.ai .bub{background:var(--card);color:var(--tx);border-bottom-left-radius:4px;box-shadow:0 1px 6px var(--shadow);transition:background .25s,color .25s}
+.msg.u .bub{background:#2B5CE6;color:#fff;border-bottom-right-radius:4px}
+[data-theme="dark"] .msg.u .bub{background:var(--blue);color:#0F0F0F}
+.m-time{font-size:10.5px;color:var(--muted);padding:0 3px;transition:color .25s}
+.typ-bub{background:var(--card);border-radius:18px;border-bottom-left-radius:4px;padding:13px 18px;box-shadow:0 1px 6px var(--shadow);display:flex;align-items:center;gap:5px;transition:background .25s}
+.td{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:bounce 1.2s ease-in-out infinite}
+.td:nth-child(2){animation-delay:.18s}.td:nth-child(3){animation-delay:.36s}
+.cur{display:inline-block;animation:blink .85s step-end infinite;color:#2B5CE6;margin-left:1px}
+[data-theme="dark"] .cur{color:var(--blue)}
+/* input zone */
+.vt-zone{padding:16px 8% 24px;flex-shrink:0;transition:padding .3s}
+@media(max-width:767px){.vt-zone{padding:12px 14px calc(var(--both) + 16px + env(safe-area-inset-bottom))}}
+.vt-bar{background:var(--card);border-radius:20px;box-shadow:0 2px 16px var(--shadow),0 0 0 1px var(--border);display:flex;flex-direction:column;padding:16px 16px 12px 20px;min-height:80px;transition:background .25s,box-shadow .25s}
+.vt-bar:focus-within{box-shadow:0 4px 24px rgba(43,92,230,.16),0 0 0 2px #2B5CE6}
+[data-theme="dark"] .vt-bar:focus-within{box-shadow:0 4px 24px rgba(217,242,26,.12),0 0 0 2px var(--blue)}
+.vt-inp{flex:1;border:none;outline:none;font-family:var(--fb);font-size:15px;color:var(--tx);background:transparent;resize:none;line-height:1.5;min-height:24px;max-height:120px;transition:color .25s}
+.vt-inp::placeholder{color:var(--muted)}
+.vt-acts{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin-top:10px}
+.btn-sp{width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;background:rgba(0,0,0,.07);color:var(--body);display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s;-webkit-tap-highlight-color:transparent}
+.btn-sp:hover{background:rgba(0,0,0,.12);transform:scale(1.06)}
+[data-theme="dark"] .btn-sp{background:rgba(255,255,255,.08);color:var(--muted)}
+[data-theme="dark"] .btn-sp:hover{background:rgba(255,255,255,.13)}
+.btn-sd{width:38px;height:38px;border-radius:50%;border:none;cursor:pointer;background:#2B5CE6;color:#fff;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s;-webkit-tap-highlight-color:transparent}
+.btn-sd:hover{background:var(--bluedark);transform:scale(1.06)}
+.btn-sd:active{transform:scale(.92)}
+.btn-sd:disabled{opacity:.4;cursor:not-allowed;transform:none}
+[data-theme="dark"] .btn-sd{background:var(--blue);color:#0F0F0F}
+/* ─── BOTTOM NAV ─── */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--both);padding-bottom:env(safe-area-inset-bottom);background:var(--sb);border-top:1px solid var(--border);z-index:50;grid-template-columns:repeat(7,1fr);align-items:center;box-shadow:0 -4px 20px var(--shadow);transition:background .25s,border-color .25s}
+@media(max-width:767px){.bnav{display:grid}}
+.tbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 2px;border:none;background:none;cursor:pointer;border-radius:8px;color:var(--muted);min-height:56px;transition:color .15s;-webkit-tap-highlight-color:transparent}
+.tbtn.on{color:#2B5CE6}[data-theme="dark"] .tbtn.on{color:var(--blue)}
+.tbtn:active{background:var(--bluepill)}
+.tico{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.tico svg{width:20px;height:20px}
+.tlbl{font-family:var(--fb);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;line-height:1;white-space:nowrap}
+/* ─── TOAST ─── */
+#toast{position:fixed;bottom:calc(var(--both) + 12px);left:50%;transform:translateX(-50%) translateY(40px);background:#1a1a2e;color:#fff;padding:11px 20px;border-radius:12px;font-family:var(--fb);font-size:13.5px;font-weight:500;box-shadow:0 8px 28px rgba(0,0,0,.2);display:flex;align-items:center;gap:9px;transition:transform .4s var(--ease),opacity .4s;z-index:1000;white-space:nowrap;opacity:0;pointer-events:none}
+#toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+[data-theme="dark"] #toast{background:var(--blue);color:#0F0F0F}
+@media(min-width:768px){#toast{bottom:28px}}
+/* ─── VOICE RINGS ─── */
+.v-ring{position:absolute;width:130px;height:130px;border-radius:50%;border:1.5px solid rgba(43,92,230,.15);opacity:0;transition:opacity .4s}
+[data-theme="dark"] .v-ring{border-color:rgba(217,242,26,.15)}
+.v-ring:nth-child(1){animation:ring-expand 2.5s ease-out infinite}
+.v-ring:nth-child(2){animation:ring-expand 2.5s ease-out .83s infinite}
+.v-ring:nth-child(3){animation:ring-expand 2.5s ease-out 1.66s infinite}
+.vl-on .v-ring{opacity:1}
+/* ─── KEYFRAMES ─── */
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes morph{0%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}25%{border-radius:30% 60% 70% 40%/50% 60% 30% 60%}50%{border-radius:50% 60% 30% 60%/30% 40% 70% 60%}75%{border-radius:40% 50% 60% 40%/60% 50% 40% 50%}100%{border-radius:60% 40% 30% 70%/60% 30% 70% 40%}}
+@keyframes breathe{0%,100%{transform:scale(1.35)}50%{transform:scale(1.55)}}
+@keyframes pulse-fast{0%,100%{transform:scale(2.1)}50%{transform:scale(2.4)}}
+@keyframes ring-expand{0%{transform:scale(1);opacity:.5}100%{transform:scale(2.5);opacity:0}}
+*{scrollbar-width:thin;scrollbar-color:var(--border) transparent}
+</style>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arun K R — Portfolio</title>
     
-</div>
-                   </div> Arunram1324@
+    <link rel="icon" id="favicon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%232B5CE6"/><text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-family="sans-serif" font-weight="900" font-size="50" fill="white"></text></svg>'>
+    
+    
+</head>
+<body>
 
-                   <!-- Image Section -->
+<div class="app">
+<div class="overlay" id="overlay" onclick="closeDr()"></div>
 
-                   <div class="w-1/2 ">
-                    <img src="./assets/hero2.svg" alt="">
+<!-- SIDEBAR -->
+<aside class="sb" id="sb">
+  <div class="sb-top"><button class="hbg" onclick="togIcon()"><span></span><span></span><span></span></button></div>
+  <nav class="nav" id="snav">
+    <div class="ni-row on" data-p="vt" data-tip="Virtual Twin" onclick="go('vt')">
+      <span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span>
+      <span class="lbl">Virtual Twin</span><span class="chev">›</span>
+    </div>
+    <div class="ni-row" data-p="intro" data-tip="Self Intro" onclick="go('intro')">
+      <span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+      <span class="lbl">Self Intro</span><span class="chev">›</span>
+    </div>
+    <div class="ni-row" data-p="exp" data-tip="Work Experience" onclick="go('exp')">
+      <span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span>
+      <span class="lbl">Work Experience</span><span class="chev">›</span>
+    </div>
+    <div class="ni-row" data-p="proj" data-tip="Projects" onclick="go('proj')">
+      <span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+      <span class="lbl">Projects</span><span class="chev">›</span>
+    </div>
+    <div class="ni-row" data-p="tools" data-tip="Tools" onclick="go('tools')">
+      <span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span>
+      <span class="lbl">Tools</span><span class="chev">›</span>
+    </div>
+    <div class="ni-row" data-p="skills" data-tip="Skills" onclick="go('skills')">
+      <span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+      <span class="lbl">Skills</span><span class="chev">›</span>
+    </div>
+    <div class="ni-row" data-p="contact" data-tip="Contact" onclick="go('contact')">
+      <span class="ico"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9A16 16 0 0 0 15 16.09l1.14-1.14a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+      <span class="lbl">Contact</span><span class="chev">›</span>
+    </div>
+  </nav>
+  <div class="sb-prof">
+    <div class="av">AK<div class="av-dot"></div></div>
+    <div class="sb-info"><div class="sb-name">Arun K R</div><div class="sb-role">UX UI / Product Designer</div></div>
+  </div>
+</aside>
 
-                   </div>
-                </div>
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="tb-left">
+      <button class="tb-ham" onclick="openDr()"><span></span><span></span><span></span></button>
+      <div class="tb-title" id="ttl">Virtual Twin</div>
+    </div>
+    <div class="tb-right">
+      <button class="thm" onclick="togTheme()">
+        <span class="i-moon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+        <span class="i-sun"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+      </button>
+      <div class="tb-av">AK</div>
+    </div>
+  </div>
+
+  <!-- SELF INTRO -->
+  <div class="view" id="v-intro">
+    <div class="ps">
+      <div class="intro-card">
+        <div class="intro-ttl">Self Intro</div>
+        <div class="intro-gap"></div>
+        <div class="intro-photo"><div class="intro-fig"><div class="intro-ph">AK</div></div></div>
+        <div class="intro-body">
+          <div class="intro-hl">UX/UI Designer | 3+ Years Experience</div>
+          <p class="intro-desc">I specialize in designing high-impact FinTech, ERP, and CRM solutions where task efficiency and system clarity drive business results. From onboarding flows to complex reporting modules, I bridge the gap between user behavior and technical feasibility.</p>
+          <div class="intro-tags">
+            <span class="i-tag">Fintech</span><span class="i-tag">HealthTech</span>
+            <span class="i-tag">EdTech</span><span class="i-tag">AgriTech</span>
+            <span class="i-tag">E-commerce</span><span class="i-tag">TravelTech</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORK EXPERIENCE -->
+  <div class="view" id="v-exp">
+    <div class="ps" style="padding:28px;overflow-y:auto">
+      <div class="pnl-card">
+        <div class="pnl-left">
+          <div class="pnl-ttl">Work Experience</div>
+          <div class="timeline">
+            <div class="tl">
+              <div class="tl-l"><div class="tl-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="tl-ln"></div></div>
+              <div class="tl-r"><div class="tl-badge">Present</div><div class="tl-co">Pentica IT Service (OPC) Pvt.Ltd</div><p class="tl-tx">Become a user champion! Learn research, wireframing, and UI design with color and layout. Build a portfolio with personal projects and design challenges to create stunning experiences.</p></div>
             </div>
-        </section>
-      
-        
-       
-    </body>
+            <div class="tl" style="animation-delay:.08s">
+              <div class="tl-l"><div class="tl-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="tl-ln"></div></div>
+              <div class="tl-r"><div class="tl-badge">Feb 2024 – Feb 2025</div><div class="tl-co">Azotos Software Technology Pvt.Ltd</div><p class="tl-tx">Become a user champion! Learn research, wireframing, and UI design with color and layout. Build a portfolio with personal projects and design challenges to create stunning experiences.</p></div>
+            </div>
+            <div class="tl" style="animation-delay:.16s">
+              <div class="tl-l"><div class="tl-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div></div>
+              <div class="tl-r"><div class="tl-badge">Jun 2023 – Jan 2024</div><div class="tl-co">Azotos Software Technology Pvt.Ltd</div><p class="tl-tx">Become a user champion! Learn research, wireframing, and UI design with color and layout. Build a portfolio with personal projects and design challenges to create stunning experiences.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="pnl-right">
+          <div class="pnl-right-deco">WX</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="view" id="v-proj">
+    <div class="ps" style="padding:28px;overflow-y:auto">
+      <div class="pnl-card" style="min-height:unset">
+        <div class="pnl-left">
+          <div class="pnl-ttl" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+            <span>Projects</span>
+            <div class="proj-nav" style="padding-top:0">
+              <button class="pnav pnav-p" onclick="pPrev()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button class="pnav pnav-n" onclick="pNext()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></button>
+            </div>
+          </div>
+          <div class="pgrid" id="pgrid"></div>
+        </div>
+        <div class="pnl-right">
+          <div class="pnl-right-deco">PJ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="view" id="v-tools">
+    <div class="ps" style="padding:28px;overflow-y:auto">
+      <div class="pnl-card">
+        <div class="pnl-left">
+          <div class="pnl-ttl">Knowing Tools</div>
+          <div class="ggrid">
+            <div class="gchip"><span>🟣</span>Figma</div><div class="gchip"><span>🔵</span>Adobe XD</div>
+            <div class="gchip"><span>⚡</span>Principle</div><div class="gchip"><span>🌀</span>ProtoPie</div>
+            <div class="gchip"><span>🟠</span>Illustrator</div><div class="gchip"><span>🔷</span>Photoshop</div>
+            <div class="gchip"><span>🌐</span>Spline 3D</div><div class="gchip"><span>🌊</span>Framer</div>
+            <div class="gchip"><span>⬛</span>Notion</div><div class="gchip"><span>🟡</span>Miro</div>
+            <div class="gchip"><span>🔶</span>FigJam</div><div class="gchip"><span>🧪</span>Maze</div>
+          </div>
+        </div>
+        <div class="pnl-right">
+          <div class="pnl-right-deco">TL</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="view" id="v-skills">
+    <div class="ps" style="padding:28px;overflow-y:auto">
+      <div class="pnl-card">
+        <div class="pnl-left">
+          <div class="pnl-ttl">Skills</div>
+          <div class="ggrid">
+            <div class="gchip"><span>🔭</span>UX Research</div><div class="gchip"><span>🎨</span>Visual Design</div>
+            <div class="gchip"><span>📐</span>Interaction Design</div><div class="gchip"><span>⚙️</span>Design Systems</div>
+            <div class="gchip"><span>📊</span>Data-Driven Design</div><div class="gchip"><span>🤝</span>Collaboration</div>
+            <div class="gchip"><span>💻</span>HTML / CSS</div><div class="gchip"><span>⚛️</span>Basic React</div>
+          </div>
+        </div>
+        <div class="pnl-right">
+          <div class="pnl-right-deco">SK</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="view" id="v-contact">
+    <div class="ps" style="padding:28px;overflow-y:auto">
+      <div class="pnl-card">
+        <div class="pnl-left">
+          <div class="pnl-ttl">Contact</div>
+          <p style="font-family:var(--fb);font-size:14.5px;color:var(--body);line-height:1.75;margin-bottom:28px;max-width:400px;transition:color .25s">Open to full-time roles, freelance projects, and design conversations!</p>
+          <div class="clinks">
+            <a class="clink" href="/cdn-cgi/l/email-protection#610013140f4f141905041208060f0413210419000c110d044f020e0c"><span>📧</span><span class="__cf_email__" data-cfemail="660714130848131e0203150f0108031426031e070b160a034805090b">[email&#160;protected]</span></a>
+            <a class="clink" href="#"><span>🔗</span>linkedin.com/in/arunkr</a>
+            <a class="clink" href="#"><span>🎨</span>dribbble.com/arunkr</a>
+            <a class="clink" href="#"><span>🐦</span>@arunkr_design</a>
+          </div>
+        </div>
+        <div class="pnl-right">
+          <div class="pnl-right-deco">CT</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- VIRTUAL TWIN — Voice AI full screen view -->
+  <div class="view on" id="v-vt">
+    <div class="vt-wrap" id="vtw">
+
+      <!-- TOP: mode toggle tabs -->
+      <div class="vt-tabs">
+        <button class="vt-tab on" id="tabVoice" onclick="switchVtMode('voice')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Voice
+        </button>
+        <button class="vt-tab" id="tabChat" onclick="switchVtMode('chat')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat
+        </button>
+      </div>
+
+      <!-- VOICE MODE -->
+      <div class="vt-voice-panel" id="vtVoicePanel">
+        <!-- ambient bg glow -->
+        <div class="vt-glow" id="vtGlow"></div>
+
+        <!-- Blob stage -->
+        <div class="vt-blob-stage">
+          <div class="v-ring"></div><div class="v-ring"></div><div class="v-ring"></div>
+          <div id="voiceBlob"></div>
+          <button id="masterBtn" onclick="toggleLiveSession()">🎤</button>
+        </div>
+
+        <!-- Status & transcript -->
+        <div class="vt-status-area">
+          <div class="vt-badge" id="vtBadge">
+            <span class="vt-bdot"></span>
+            <span id="vtBadgeTxt">Listening…</span>
+          </div>
+          <div id="voiceStatus">Ready to chat?</div>
+          <div class="vt-transcript-card">
+            <div id="voiceTranscript">Click the mic and start talking</div>
+          </div>
+          <div class="vt-hints">
+            <span class="vt-hint" onclick="hintTap('Who are you?')">💬 "Who are you?"</span>
+            <span class="vt-hint" onclick="hintTap('Show me your projects')">📁 "Show projects"</span>
+            <span class="vt-hint" onclick="hintTap('What are your contact details?')">📧 "Contact details"</span>
+            <span class="vt-hint" onclick="hintTap('What are your skills and tools?')">🛠️ "Skills &amp; tools"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHAT MODE (hidden initially) -->
+      <div class="vt-chat-panel vt-hidden" id="vtChatPanel">
+        <div class="vt-init" id="vti">
+          <p class="vt-sub">I'm Arun K R — a junior UX UI designer passionately creating digital experiences and solutions for over 2+ years.</p>
+          <div class="vt-hl">What you Know about me?</div>
+        </div>
+        <div class="vt-msgs vt-hidden" id="vtm"></div>
+      </div>
+
+    </div>
+
+    <!-- Input bar — only visible in chat mode -->
+    <div class="vt-zone vt-hidden" id="vtZone">
+      <div class="vt-bar">
+        <textarea class="vt-inp" id="vti-inp" placeholder="Ask here..." rows="1" onkeydown="vtKey(event)" oninput="vtResize(this)"></textarea>
+        <div class="vt-acts">
+          <button class="btn-sd" id="vtbtn" onclick="vtSend()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav" id="bnav">
+  <button class="tbtn on" data-p="vt" onclick="go('vt')"><span class="tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></span><span class="tlbl">Twin</span></button>
+  <button class="tbtn" data-p="intro" onclick="go('intro')"><span class="tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span><span class="tlbl">Intro</span></button>
+  <button class="tbtn" data-p="exp" onclick="go('exp')"><span class="tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></span><span class="tlbl">Work</span></button>
+  <button class="tbtn" data-p="proj" onclick="go('proj')"><span class="tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span class="tlbl">Projects</span></button>
+  <button class="tbtn" data-p="tools" onclick="go('tools')"><span class="tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></span><span class="tlbl">Tools</span></button>
+  <button class="tbtn" data-p="skills" onclick="go('skills')"><span class="tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><span class="tlbl">Skills</span></button>
+  <button class="tbtn" data-p="contact" onclick="go('contact')"><span class="tico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 9A16 16 0 0 0 15 16.09l1.14-1.14a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span><span class="tlbl">Contact</span></button>
+</nav>
+</div>
+
+
+
+<div id="toast"><span>📋</span> Email copied!</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ── THEME ── */
+const R = document.documentElement;
+(function(){ var s=localStorage.getItem('ak-theme')||'light'; R.setAttribute('data-theme',s); })();
+function togTheme(){ var c=R.getAttribute('data-theme'); var n=c==='dark'?'light':'dark'; R.setAttribute('data-theme',n); localStorage.setItem('ak-theme',n); }
+
+/* ── SIDEBAR ── */
+var sbEl=document.getElementById('sb'), ovEl=document.getElementById('overlay'), iconMode=false;
+function togIcon(){ if(window.innerWidth>=1024){ iconMode=!iconMode; sbEl.classList.toggle('icon',iconMode); } }
+function openDr(){ if(window.innerWidth<1024&&window.innerWidth>=768){ sbEl.classList.add('open'); ovEl.classList.add('show'); } }
+function closeDr(){ sbEl.classList.remove('open'); ovEl.classList.remove('show'); }
+
+/* ── NAVIGATION ── */
+var TITLES={intro:'Self Intro',exp:'Work Experience',proj:'Projects',tools:'Knowing Tools',skills:'Skills',contact:'Contact',vt:'Virtual Twin'};
+
+function go(id){
+  if(window.innerWidth<1024&&window.innerWidth>=768) closeDr();
+  // sidebar nav
+  var sItems=document.querySelectorAll('#snav .ni-row');
+  for(var i=0;i<sItems.length;i++) sItems[i].classList.toggle('on', sItems[i].getAttribute('data-p')===id);
+  // bottom nav
+  var bItems=document.querySelectorAll('#bnav .tbtn');
+  for(var j=0;j<bItems.length;j++) bItems[j].classList.toggle('on', bItems[j].getAttribute('data-p')===id);
+  // views
+  var views=document.querySelectorAll('.view');
+  for(var k=0;k<views.length;k++) views[k].classList.remove('on');
+  var target=document.getElementById('v-'+id);
+  if(target) target.classList.add('on');
+  // title
+  document.getElementById('ttl').textContent=TITLES[id]||'';
+}
+
+/* ── PROJECTS ── */
+var PROJS=[
+  {name:'MAP – MAN',desc:'Here Project Explanation or online about project',cat:'Industry'},
+  {name:'GYM – POS',desc:'Here Project Explanation or online about project',cat:'Industry'},
+  {name:'MAP – MAN',desc:'Here Project Explanation or online about project',cat:'Industry'},
+  {name:'MAP – MAN',desc:'Here Project Explanation or online about project',cat:'Industry'},
+  {name:'GYM – POS',desc:'Here Project Explanation or online about project',cat:'Industry'},
+  {name:'MAP – MAN',desc:'Here Project Explanation or online about project',cat:'Industry'}
+];
+var PG=0, PPP=6;
+function renderProj(){
+  var g=document.getElementById('pgrid');
+  var items=PROJS.slice(PG*PPP,(PG+1)*PPP);
+  var html='';
+  for(var i=0;i<items.length;i++){
+    var p=items[i];
+    html+='<div class="pcard" style="animation-delay:'+(i*0.06)+'s">'
+      +'<div class="pcard-mock"></div>'
+      +'<div class="pcard-badge">'+p.cat+'</div>'
+      +'<div class="pcard-info"><div class="pcard-name">'+p.name+'</div><div class="pcard-desc">'+p.desc+'</div></div>'
+      +'</div>';
+  }
+  g.innerHTML=html;
+}
+renderProj();
+function pNext(){ if((PG+1)*PPP<PROJS.length){ PG++; renderProj(); } }
+function pPrev(){ if(PG>0){ PG--; renderProj(); } }
+
+/* ── VIRTUAL TWIN ── */
+var vtStreaming=false, vtFirst=true, vtHist=[];
+
+var SYSPR='You are Arun K R\'s personal AI portfolio assistant. Speak in first person as Arun K R, a UX/UI and Product Designer based in India with 3+ years of experience. Be warm, confident, and conversational.\n\nABOUT: Specializes in FinTech, ERP, CRM product design. Worked at Pentica IT Service (OPC) Pvt.Ltd (current), Azotos Software Technology (Feb 2024-Feb 2025 and Jun 2023-Jan 2024).\n\nPROJECTS: Conversational Portfolio, FinTrack Mobile App, ShopFlow E-commerce (34% conversion lift), Nexus Design System (200+ Figma components), MAP-MAN, GYM-POS.\n\nTOOLS: Figma, Adobe XD, Principle, ProtoPie, Illustrator, Photoshop, Spline 3D, Notion, Miro, FigJam, Maze, Framer, Webflow, HTML/CSS, Basic React.\n\nSKILLS: UX Research, Visual Design, Interaction Design, Design Systems, Data-Driven Design, Collaboration.\n\nCONTACT: arun.uxdesigner@example.com | linkedin.com/in/arunkr | dribbble.com/arunkr | @arunkr_design\n\nRULES: Always respond as Arun in first person. Keep responses concise and conversational. Redirect off-topic questions back to design/portfolio.';
+
+var KB={
+  intro:'Hi! I\'m Arun K R, a UX/UI and Product Designer with 3+ years of experience based in Chennai, India.\n\nI specialize in designing high-impact FinTech, ERP, and CRM solutions. I bridge the gap between user behavior and technical feasibility.',
+  exp:'My professional journey:\n\nPresent — Pentica IT Service (OPC) Pvt.Ltd\nFull-stack product design, UX research, and design systems.\n\nFeb 2024 to Feb 2025 — Azotos Software Technology Pvt.Ltd\nUI/UX design for enterprise SaaS products.\n\nJun 2023 to Jan 2024 — Azotos Software Technology Pvt.Ltd\nJunior designer working on mobile and web interfaces.',
+  proj:'My key projects:\n\nMAP-MAN — location-based mobile app design\nGYM-POS — point-of-sale system for fitness centres\nFinTrack — Gen Z personal finance tracker\nShopFlow — e-commerce redesign with 34% conversion improvement\nNexus Design System — 200+ Figma components\nConversational Portfolio — this very experience!',
+  tools:'My design toolkit:\n\nDesign & Prototype: Figma, Adobe XD, Principle, ProtoPie\nVisual: Illustrator, Photoshop, Spline 3D, Framer\nResearch: Notion, Miro, FigJam, Maze\nDev: HTML/CSS, Basic React, Webflow',
+  skills:'My core skills:\n\nUX Research — user interviews, journey mapping\nVisual Design — typography, colour theory, layout\nInteraction Design — micro-interactions, animation, prototyping\nDesign Systems — component architecture, tokens\nData-Driven Design — A/B testing, analytics\nCollaboration — cross-functional teamwork, dev handoff',
+  contact:'Lets connect!\n\nEmail: arun.uxdesigner@example.com\nLinkedIn: linkedin.com/in/arunkr\nDribbble: dribbble.com/arunkr\nTwitter: @arunkr_design\n\nOpen to full-time roles, freelance projects, and design conversations!',
+  def:'Great question! I can tell you about my design background, projects, skills, tools, or how to get in touch. What would you like to know?'
+};
+
+function kbAnswer(q){
+  var m=q.toLowerCase();
+  if(/who|intro|about|yourself|years|experience/.test(m)) return KB.intro;
+  if(/work|job|compan|pentica|azotos|career/.test(m)) return KB.exp;
+  if(/project|portfolio|map|gym|fintrack|shopflow|nexus/.test(m)) return KB.proj;
+  if(/tool|figma|software|use/.test(m)) return KB.tools;
+  if(/skill|good at|expertise|capable/.test(m)) return KB.skills;
+  if(/contact|email|reach|hire|freelance|linkedin/.test(m)) return KB.contact;
+  if(/hello|hi|hey/.test(m)) return KB.intro;
+  return KB.def;
+}
+
+function ts(){ return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
+function sc(){ var m=document.getElementById('vtm'); if(m) setTimeout(function(){ m.scrollTop=m.scrollHeight; },30); }
+function setDis(d){ document.getElementById('vti-inp').disabled=d; document.getElementById('vtbtn').disabled=d; }
+
+function showChat(){
+  if(!vtFirst) return;
+  vtFirst=false;
+  document.getElementById('vti').classList.add('vt-hidden');
+  document.getElementById('vtm').classList.remove('vt-hidden');
+}
+
+function addMsg(html){
+  var m=document.getElementById('vtm');
+  var d=document.createElement('div');
+  d.innerHTML=html;
+  if(d.firstElementChild) m.appendChild(d.firstElementChild);
+  sc();
+}
+
+function addUser(txt){
+  showChat();
+  addMsg('<div class="msg u"><div class="m-av">U</div><div class="m-body"><div class="bub">'+esc(txt)+'</div><div class="m-time">'+ts()+'</div></div></div>');
+}
+
+function addTyp(){
+  var m=document.getElementById('vtm');
+  var d=document.createElement('div');
+  d.className='msg ai'; d.id='vt-typ';
+  d.innerHTML='<div class="m-av">A</div><div class="m-body"><div class="typ-bub"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>';
+  m.appendChild(d); sc();
+}
+function remTyp(){ var t=document.getElementById('vt-typ'); if(t) t.remove(); }
+
+function mkBub(){
+  remTyp();
+  var m=document.getElementById('vtm');
+  var d=document.createElement('div');
+  d.className='msg ai'; d.id='vt-sb';
+  d.innerHTML='<div class="m-av">A</div><div class="m-body"><div class="bub" id="vt-sb2"><span class="cur">&#x25CD;</span></div></div>';
+  m.appendChild(d); sc();
+  return document.getElementById('vt-sb2');
+}
+
+function finBub(txt){
+  var b=document.getElementById('vt-sb2'); if(b) b.innerHTML=esc(txt).replace(/\n/g,'<br>');
+  var s=document.getElementById('vt-sb');
+  if(s){ s.removeAttribute('id'); var t=document.createElement('div'); t.className='m-time'; t.textContent=ts(); s.querySelector('.m-body').appendChild(t); }
+}
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function streamTxt(txt,onC,onD){
+  var words=txt.split(' '), i=0, built='';
+  function tick(){
+    if(i>=words.length){ onD(built); return; }
+    built+=words.slice(i,i+2).join(' ')+' '; i+=2;
+    onC(built);
+    setTimeout(tick, 35+Math.random()*25);
+  }
+  setTimeout(tick,400);
+}
+
+async function callAI(msg){
+  if(vtStreaming) return;
+  vtStreaming=true; setDis(true);
+  vtHist.push({role:'user',content:msg});
+  addTyp();
+  var done=false;
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','anthropic-version':'2023-06-01'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:SYSPR,messages:vtHist,stream:true})
+    });
+    if(!res.ok) throw new Error('api_'+res.status);
+    var reader=res.body.getReader(), dec=new TextDecoder(), full='', bub=null, buf='';
+    while(true){
+      var rd=await reader.read(); if(rd.done) break;
+      buf+=dec.decode(rd.value,{stream:true});
+      var lines=buf.split('\n'); buf=lines.pop();
+      for(var li=0;li<lines.length;li++){
+        var line=lines[li];
+        if(line.indexOf('data: ')!==0) continue;
+        var raw=line.slice(6).trim(); if(raw==='[DONE]') continue;
+        try{
+          var p=JSON.parse(raw);
+          if(p.type==='content_block_start'&&p.content_block&&p.content_block.type==='text'&&!bub) bub=mkBub();
+          if(p.type==='content_block_delta'&&p.delta&&p.delta.type==='text_delta'){
+            full+=p.delta.text;
+            if(bub){ bub.innerHTML=esc(full).replace(/\n/g,'<br>')+'<span class="cur">&#x25CD;</span>'; sc(); }
+          }
+          if(p.type==='message_stop'){ finBub(full); vtHist.push({role:'assistant',content:full}); done=true; }
+        }catch(e){}
+      }
+    }
+    if(!done&&full){ if(!bub) mkBub(); finBub(full); vtHist.push({role:'assistant',content:full}); }
+  }catch(err){
+    // fallback to local KB
+    remTyp();
+    var ans=kbAnswer(msg);
+    var bub2=mkBub();
+    await new Promise(function(resolve){
+      streamTxt(ans,
+        function(p){ if(bub2) bub2.innerHTML=esc(p).replace(/\n/g,'<br>')+'<span class="cur">&#x25CD;</span>'; sc(); },
+        function(f){ finBub(f); vtHist.push({role:'assistant',content:f}); resolve(); }
+      );
+    });
+  }
+  vtStreaming=false; setDis(false);
+  var inp=document.getElementById('vti-inp'); if(inp) inp.focus();
+}
+
+function vtSend(){
+  if(vtStreaming) return;
+  var inp=document.getElementById('vti-inp');
+  var txt=inp.value.trim(); if(!txt) return;
+  inp.value=''; inp.style.height='';
+  addUser(txt); callAI(txt);
+}
+function vtKey(e){ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); vtSend(); } }
+function vtResize(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
+
+/* ══ VOICE AI ══ */
+var isLive = false;
+var recognition = null;
+
+if(window.SpeechRecognition || window.webkitSpeechRecognition){
+  recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  recognition.onresult = function(event){
+    var text = '';
+    for(var i=event.resultIndex;i<event.results.length;i++) text+=event.results[i][0].transcript;
+    var tr=document.getElementById('voiceTranscript');
+    if(tr){ tr.textContent=text; tr.style.fontStyle='normal'; tr.style.color='var(--tx)'; }
+    if(event.results[event.results.length-1].isFinal){
+      var reply=voiceGetAnswer(text);
+      voiceHandleReply(reply);
+    }
+  };
+  recognition.onerror=function(e){
+    if(e.error==='not-allowed'){
+      var tr=document.getElementById('voiceTranscript');
+      if(tr) tr.textContent='Mic access denied. Allow permissions.';
+      stopSession();
+    }
+  };
+  recognition.onend=function(){ if(isLive){ try{ recognition.start(); }catch(e){} } };
+}
+
+function vtSparkle(){
+  // Open Virtual Twin in voice mode
+  go('vt');
+  switchVtMode('voice');
+}
+
+function hintTap(question){
+  var voicePanel = document.getElementById('vtVoicePanel');
+  var isVoiceVisible = voicePanel && !voicePanel.classList.contains('vt-hidden');
+  
+  if(isVoiceVisible && isLive){
+    // Voice mode is active — speak the question as if user said it
+    var tr = document.getElementById('voiceTranscript');
+    if(tr){ tr.textContent = question; tr.style.fontStyle='normal'; tr.style.color='var(--tx)'; }
+    var reply = voiceGetAnswer(question);
+    voiceHandleReply(reply);
+  } else {
+    // Switch to chat mode and auto-send
+    switchVtMode('chat');
+    setTimeout(function(){
+      showChat();
+      addUser(question);
+      callAI(question);
+    }, 80);
+  }
+}
+
+function switchVtMode(mode){
+  var voicePanel = document.getElementById('vtVoicePanel');
+  var chatPanel  = document.getElementById('vtChatPanel');
+  var zone       = document.getElementById('vtZone');
+  var tabVoice   = document.getElementById('tabVoice');
+  var tabChat    = document.getElementById('tabChat');
+  if(!voicePanel) return;
+  if(mode==='voice'){
+    voicePanel.classList.remove('vt-hidden');
+    chatPanel.classList.add('vt-hidden');
+    zone.classList.add('vt-hidden');
+    tabVoice.classList.add('on');
+    tabChat.classList.remove('on');
+  } else {
+    voicePanel.classList.add('vt-hidden');
+    chatPanel.classList.remove('vt-hidden');
+    zone.classList.remove('vt-hidden');
+    tabVoice.classList.remove('on');
+    tabChat.classList.add('on');
+    // Stop voice if switching to chat
+    if(isLive) stopSession();
+    // Focus chat input
+    setTimeout(function(){ var inp=document.getElementById('vti-inp'); if(inp) inp.focus(); },100);
+  }
+}
+
+function toggleLiveSession(){ if(!isLive) startSession(); else stopSession(); }
+
+function startSession(){
+  if(!recognition){
+    var tr=document.getElementById('voiceTranscript');
+    if(tr) tr.textContent='Speech recognition not supported. Try Chrome.';
+    return;
+  }
+  isLive=true;
+  var btn=document.getElementById('masterBtn');
+  if(btn){ btn.classList.add('active'); btn.textContent='⏹️'; }
+  var st=document.getElementById('voiceStatus');
+  if(st){ st.textContent='Listening…'; st.style.color='#2B5CE6'; }
+  voiceSetBlob('listening');
+  try{ recognition.start(); }catch(e){}
+}
+
+function stopSession(){
+  isLive=false;
+  var btn=document.getElementById('masterBtn');
+  if(btn){ btn.classList.remove('active'); btn.textContent='🎤'; }
+  var st=document.getElementById('voiceStatus');
+  if(st){ st.textContent='Ready to chat?'; st.style.color='var(--muted)'; }
+  var tr=document.getElementById('voiceTranscript');
+  if(tr){ tr.textContent='Click the mic and start talking'; tr.style.fontStyle='italic'; tr.style.color='var(--body)'; }
+  if(recognition){ try{ recognition.stop(); }catch(e){} }
+  window.speechSynthesis.cancel();
+  voiceSetBlob('idle');
+}
+
+function voiceHandleReply(reply){
+  var st=document.getElementById('voiceStatus');
+  if(st){ st.textContent='Arun Speaking…'; st.style.color='#9B51E0'; }
+  voiceSpeak(reply);
+}
+
+function voiceSpeak(text){
+  window.speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(text);
+  var voices=window.speechSynthesis.getVoices();
+  var v=null;
+  for(var i=0;i<voices.length;i++){
+    if(voices[i].name.indexOf('Google US English')>=0){ v=voices[i]; break; }
+  }
+  if(!v){ for(var i=0;i<voices.length;i++){ if(voices[i].name.indexOf('Samantha')>=0){ v=voices[i]; break; } } }
+  if(!v){ for(var i=0;i<voices.length;i++){ if(voices[i].lang==='en-US'){ v=voices[i]; break; } } }
+  if(v) u.voice=v;
+  u.rate=0.95; u.pitch=1.0;
+  u.onstart=function(){ voiceSetBlob('speaking'); };
+  u.onend=function(){ if(isLive){ var st=document.getElementById('voiceStatus'); if(st){ st.textContent='Listening…'; st.style.color='#2B5CE6'; } voiceSetBlob('listening'); } };
+  window.speechSynthesis.speak(u);
+}
+
+function voiceSetBlob(mode){
+  var blob  = document.getElementById('voiceBlob');
+  var glow  = document.getElementById('vtGlow');
+  var badge = document.getElementById('vtBadge');
+  var rings = document.querySelectorAll('.vt-blob-stage .v-ring');
+  if(!blob) return;
+  var isDark = document.documentElement.getAttribute('data-theme')==='dark';
+  var accentColor = isDark ? '#D9F21A' : '#2B5CE6';
+
+  if(mode==='listening'){
+    blob.style.transform='scale(1.35)';
+    blob.style.background=accentColor;
+    blob.style.filter='blur(22px)';
+    blob.style.animation='morph 8s ease-in-out infinite,breathe 3s ease-in-out infinite';
+    if(glow){ glow.className='vt-glow listening'; }
+    if(badge){ badge.className='vt-badge show'; badge.querySelector('#vtBadgeTxt').textContent='Listening…'; }
+    for(var i=0;i<rings.length;i++) rings[i].style.opacity='1';
+
+  } else if(mode==='speaking'){
+    blob.style.transform='scale(2.0)';
+    blob.style.background='#9B51E0';
+    blob.style.filter='blur(32px)';
+    blob.style.animation='morph 4s ease-in-out infinite,pulse-fast .5s ease-in-out infinite';
+    if(glow){ glow.className='vt-glow speaking'; }
+    if(badge){ badge.className='vt-badge show speaking'; badge.querySelector('#vtBadgeTxt').textContent='Speaking…'; }
+    for(var i=0;i<rings.length;i++) rings[i].style.opacity='0';
+
+  } else {
+    blob.style.transform='scale(1)';
+    blob.style.background=accentColor;
+    blob.style.filter='blur(18px)';
+    blob.style.animation='morph 8s ease-in-out infinite';
+    if(glow){ glow.className='vt-glow'; }
+    if(badge){ badge.className='vt-badge'; }
+    for(var i=0;i<rings.length;i++) rings[i].style.opacity='0';
+  }
+}
+
+function voiceGetAnswer(input){
+  var m=input.toLowerCase();
+  if(/contact|email|details|reach/.test(m)){
+    navigator.clipboard.writeText('arun.uxdesigner@example.com').catch(function(){});
+    var t=document.getElementById('toast'); if(t){ t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2800); }
+    return "Sure! I've copied my email address to your clipboard. You can also reach me on LinkedIn at linkedin.com/in/arunkr. What else would you like to know?";
+  }
+  if(/who|intro|about|yourself/.test(m)) return "I'm Arun K R, a UX and Product Designer with over 3 years of experience in Chennai. I specialize in FinTech, ERP, and CRM product design.";
+  if(/project|work|map|gym|fintrack|shopflow/.test(m)) return "I've worked on projects like MAP-MAN, GYM-POS, FinTrack, and ShopFlow — a redesign that improved checkout conversion by 34 percent.";
+  if(/freelance|available|hire/.test(m)) return "Yes! I started my freelance business in March 2026 and I'm open to local and international clients.";
+  if(/skill|tool|figma/.test(m)) return "My core skills are UX Research, Interaction Design, and Design Systems. I use Figma, ProtoPie, and Spline 3D daily.";
+  if(/setup|monitor|macbook/.test(m)) return "I work on a MacBook Air M4 paired with a 32-inch Zebronics monitor, keeps my designs pixel-perfect!";
+  if(/hello|hi|hey/.test(m)) return "Hey there! I'm Arun K R's voice AI. Ask me anything about my work, skills, or how to get in touch!";
+  return "That's interesting! Want to know about my design process, projects, skills, or how to collaborate?";
+}
+
+window.speechSynthesis.onvoiceschanged=function(){ window.speechSynthesis.getVoices(); };
+
+function copyEmail(){
+  navigator.clipboard.writeText('arun.uxdesigner@example.com').catch(function(){});
+  var t=document.getElementById('toast'); if(t){ t.classList.add('show'); setTimeout(function(){ t.classList.remove('show'); },2800); }
+}
+</script>
+</body>
 </html>
-
-
